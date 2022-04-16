@@ -17,7 +17,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FetchAddressTask.OnTaskCompleted {
 
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -73,16 +73,22 @@ public class MainActivity extends AppCompatActivity {
 
                     if ( location != null ) {
 
-                        String result = "Latitude " + String.valueOf(location.getLatitude())
-                                + "\n Longitude" + String.valueOf(location.getLongitude());
+//                        String result = "Latitude " + String.valueOf(location.getLatitude())
+//                                + "\n Longitude" + String.valueOf(location.getLongitude());
+//
+//                        mTextViewLocation.setText(result);
 
-                        mTextViewLocation.setText(result);
-
+                        new FetchAddressTask(MainActivity.this,MainActivity.this).execute(location);
                     } else {
                         mTextViewLocation.setText("Location Not Found");
                     }
                 }
             });
         }
+    }
+
+    @Override
+    public void onTaskCompleted(String result) {
+        mTextViewLocation.setText(result);
     }
 }
